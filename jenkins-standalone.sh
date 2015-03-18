@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
-
+# production
+HOST="$(ip a |grep 'global bond0.11' |cut -d/ -f1|awk  '{print $2}')"
+# test
+[[ "x$HOST" == "x" ]] && {
+	HOST="$(ip a |grep 'global enp0s8' |cut -d/ -f1|awk  '{print $2}')"
+}
+PORT="9000" 
 # $JENKINS_VERSION should be an LTS release
 JENKINS_VERSION="1.596.1"
 
@@ -38,7 +44,7 @@ fi
 
 # Accept ZooKeeper paths on the command line
 if [[ ! $# > 3 ]]; then
-    echo "Usage: $0 -z zk://10.132.188.212:2181[, ... ]/mesos -r redis.example.com"
+    echo "Usage: $0 -z zk://10.132.188.212:2181[, ... ]/mesos"
     echo
     exit 1
 fi
@@ -49,10 +55,6 @@ while [[ $# > 1 ]]; do
     case $key in
         -z|--zookeeper)
             ZOOKEEPER_PATHS="$1"
-            shift
-            ;;
-        -r|--redis-host)
-            REDIS_HOST="$1"
             shift
             ;;
         *)
@@ -77,7 +79,6 @@ done
 
 # Jenkins config files
 sed -i "s!_MAGIC_ZOOKEEPER_PATHS!${ZOOKEEPER_PATHS}!" config.xml
-sed -i "s!_MAGIC_REDIS_HOST!${REDIS_HOST}!" jenkins.plugins.logstash.LogstashInstallation.xml
 sed -i "s!_MAGIC_JENKINS_URL!http://${HOST}:${PORT}!" jenkins.model.JenkinsLocationConfiguration.xml
 
 # Start the master
