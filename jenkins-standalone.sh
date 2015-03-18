@@ -43,7 +43,7 @@ if [[ $? != 0 ]]; then
 fi
 
 # Accept ZooKeeper paths on the command line
-if [[ ! $# > 3 ]]; then
+if [[ ! $# > 2 ]]; then
     echo "Usage: $0 -z zk://10.132.188.212:2181[, ... ]/mesos"
     echo
     exit 1
