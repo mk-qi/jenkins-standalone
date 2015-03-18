@@ -1,7 +1,16 @@
 # jenkins-standalone
 Run a Jenkins master on Apache Mesos and Marathon.
 
+i run it with  marathon  Command is like below
+     
+     git clone https://github.com/mk-qi/jenkins-standalone.git &&cd jenkins-standalone;sh jenkins-standalone.sh -z $(cat /etc/mesos/zk)
+
+
+=======================================cut line=========
+
 <http://rogerignazio.com/blog/scaling-jenkins-mesos-marathon>.
+
+
 
 ## Usage
 `jenkins-standalone.sh` takes two arguments:
